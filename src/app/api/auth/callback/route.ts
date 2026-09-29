@@ -62,8 +62,12 @@ export async function GET(request: NextRequest) {
       redirectUri,
     });
 
-    if (!tokenResponse.access_token || tokenResponse.token_type !== "Bearer") {
-      return redirectWithStatus(request, "token");
+    if (!tokenResponse.access_token) {
+      return redirectWithStatus(request, "token", "/", "missing_access_token");
+    }
+
+    if (!tokenResponse.token_type || tokenResponse.token_type.toLowerCase() !== "bearer") {
+      return redirectWithStatus(request, "token", "/", "invalid_token_type");
     }
 
     const expiresAt = Date.now() + Math.max(1, tokenResponse.expires_in ?? 3600) * 1000;
@@ -95,7 +99,7 @@ export async function GET(request: NextRequest) {
       return redirectWithStatus(request, "token", "/", `exchange_${caught.status}`);
     }
 
-    return redirectWithStatus(request, "token");
+    return redirectWithStatus(request, "token", "/", "exchange_failed");
   }
 }
 
