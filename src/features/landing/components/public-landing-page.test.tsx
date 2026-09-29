@@ -31,4 +31,10 @@ describe("PublicLandingPage", () => {
     expect(screen.getAllByRole("link", { name: /Open Trading App/i })[0].getAttribute("href")).toBe("/trade");
     expect(screen.queryByRole("link", { name: /^Get Started$/i })).toBeNull();
   });
+
+  it("shows a safe callback failure message without exposing provider details", () => {
+    render(<PublicLandingPage authStatus="session" isAuthenticated={false} returnTo="/trade" />);
+
+    expect(screen.getByRole("status").textContent).toContain("DERIV_SESSION_SECRET");
+  });
 });

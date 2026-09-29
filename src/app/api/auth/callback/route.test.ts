@@ -70,4 +70,16 @@ describe("/auth/callback OAuth handling", () => {
 
     expect(response.headers.get("location")).toBe("http://localhost:3000/?auth=state");
   });
+
+  it("reports missing session configuration before attempting token exchange", async () => {
+    vi.stubEnv("DERIV_CLIENT_ID", "12345");
+    vi.stubEnv("DERIV_AUTH_BASE_URL", "https://auth.deriv.com");
+    vi.stubEnv("DERIV_SESSION_SECRET", "too-short");
+    const fetchSpy = vi.spyOn(globalThis, "fetch");
+
+    const response = await GET(callbackRequest("/trade"));
+
+    expect(response.headers.get("location")).toBe("http://localhost:3000/?auth=session");
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
 });

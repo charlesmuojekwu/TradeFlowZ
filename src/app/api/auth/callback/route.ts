@@ -42,6 +42,10 @@ export async function GET(request: NextRequest) {
     return redirectWithStatus(request, "config");
   }
 
+  if (!env.DERIV_SESSION_SECRET || env.DERIV_SESSION_SECRET.length < 32) {
+    return redirectWithStatus(request, "session");
+  }
+
   try {
     const redirectUri = env.DERIV_REDIRECT_URI ?? new URL("/auth/callback", request.url).toString();
     const tokenResponse = await exchangeCodeForToken({

@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 
 type PublicLandingPageProps = {
+  authStatus?: string;
   isAuthenticated: boolean;
   returnTo?: string;
 };
@@ -36,9 +37,10 @@ const capabilities = [
   ["Review", "Inspect settled contracts and history."],
 ] as const;
 
-export function PublicLandingPage({ isAuthenticated, returnTo = "/trade" }: PublicLandingPageProps) {
+export function PublicLandingPage({ authStatus, isAuthenticated, returnTo = "/trade" }: PublicLandingPageProps) {
   const primaryHref = isAuthenticated ? "/trade" : registerHref(returnTo);
   const secondaryHref = isAuthenticated ? "/trade" : signInHref(returnTo);
+  const authMessage = getAuthMessage(authStatus);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#080B12] text-[#F7F8FA]">
@@ -119,6 +121,11 @@ export function PublicLandingPage({ isAuthenticated, returnTo = "/trade" }: Publ
 
       <section id="product" className="relative mx-auto max-w-7xl px-5 pb-14 pt-16 text-center sm:pt-20 lg:px-8 lg:pb-20">
         <div className="mx-auto max-w-5xl">
+          {authMessage ? (
+            <div className="mx-auto mb-6 max-w-3xl rounded-md border border-[#EF4444]/30 bg-[#EF4444]/10 px-4 py-3 text-left text-sm leading-6 text-[#FCA5A5]" role="status">
+              {authMessage}
+            </div>
+          ) : null}
           <p className="mx-auto inline-flex items-center gap-2 rounded border border-[#273044] bg-[#101521] px-3 py-1.5 text-xs font-medium uppercase tracking-[0.24em] text-[#AAB2C2]">
             <CircleDot className="h-3.5 w-3.5 text-[#818CF8]" aria-hidden="true" />
             One Deriv-connected workspace
@@ -521,4 +528,20 @@ function FooterColumn({ title, links }: { title: string; links: Array<[string, s
       </ul>
     </div>
   );
+}
+
+function getAuthMessage(status?: string) {
+  if (!status) {
+    return undefined;
+  }
+
+  const messages: Record<string, string> = {
+    config: "Authentication is not configured. Check the Deriv client ID and redirect URI on the server.",
+    error: "Deriv returned an authentication error. Please try signing in again.",
+    session: "Authentication completed, but the app could not create a secure session. Check DERIV_SESSION_SECRET in the deployment environment.",
+    state: "Authentication expired or could not be verified. Please start sign-in again from this page.",
+    token: "Authentication could not be completed with Deriv. Check the OAuth redirect URI and server configuration.",
+  };
+
+  return messages[status] ?? "Authentication could not be completed. Please try again.";
 }

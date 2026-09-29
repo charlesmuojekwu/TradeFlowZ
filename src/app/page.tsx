@@ -2,12 +2,18 @@ import { PublicLandingPage } from "@/features/landing/components/public-landing-
 import { getCurrentSession, normalizeReturnPath } from "@/lib/auth";
 
 type HomePageProps = {
-  searchParams?: Promise<{ returnTo?: string }>;
+  searchParams?: Promise<{ auth?: string; returnTo?: string }>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
   const session = await getCurrentSession();
 
-  return <PublicLandingPage isAuthenticated={Boolean(session)} returnTo={normalizeReturnPath(params?.returnTo)} />;
+  return (
+    <PublicLandingPage
+      authStatus={params?.auth}
+      isAuthenticated={Boolean(session)}
+      returnTo={normalizeReturnPath(params?.returnTo)}
+    />
+  );
 }
