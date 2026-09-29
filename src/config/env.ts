@@ -6,6 +6,7 @@ const publicEnvSchema = z.object({
   NEXT_PUBLIC_DERIV_PUBLIC_WS_URL: z
     .string()
     .url()
+    .refine((value) => value.startsWith("wss://"), "Deriv public WebSocket URL must use wss://")
     .default("wss://api.derivws.com/trading/v1/options/ws/public"),
 });
 

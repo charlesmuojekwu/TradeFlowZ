@@ -176,6 +176,10 @@ export class DerivAuthenticatedWebSocketClient {
       throw new Error("This environment does not provide WebSocket.");
     }
 
+    if (!isSecureWebSocketUrl(url)) {
+      throw new Error("Deriv returned an invalid trading WebSocket URL.");
+    }
+
     await new Promise<void>((resolve, reject) => {
       const socket = new WebSocketImpl(url);
       this.socket = socket;
@@ -364,6 +368,14 @@ export class DerivAuthenticatedWebSocketClient {
   private setStatus(status: ConnectionStatus, error?: string) {
     this.status = status;
     this.onStatusChange?.(status, error);
+  }
+}
+
+function isSecureWebSocketUrl(value: string) {
+  try {
+    return new URL(value).protocol === "wss:";
+  } catch {
+    return false;
   }
 }
 

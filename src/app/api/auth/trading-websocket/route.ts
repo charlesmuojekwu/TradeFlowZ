@@ -53,10 +53,10 @@ export async function POST(request: NextRequest) {
     );
     const body = (await otpResponse.json()) as OtpResponse;
 
-    if (!otpResponse.ok || !body.data?.url) {
+    if (!otpResponse.ok || !body.data?.url || !isSecureWebSocketUrl(body.data.url)) {
       const response = NextResponse.json(
         {
-          error: body.errors?.[0]?.message ?? "Unable to authorize trading WebSocket.",
+          error: body.errors?.[0]?.message ?? "Unable to authorize a secure trading WebSocket.",
         },
         { status: otpResponse.status },
       );
@@ -73,5 +73,13 @@ export async function POST(request: NextRequest) {
     });
   } catch {
     return NextResponse.json({ error: "Unable to authorize trading WebSocket." }, { status: 500 });
+  }
+}
+
+function isSecureWebSocketUrl(value: string) {
+  try {
+    return new URL(value).protocol === "wss:";
+  } catch {
+    return false;
   }
 }
