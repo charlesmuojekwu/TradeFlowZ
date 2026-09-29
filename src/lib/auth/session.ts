@@ -98,6 +98,7 @@ function deriveKey(secret: string) {
 const safeReturnPaths = new Set([
   "/dashboard",
   "/trade",
+  "/ai",
   "/automation",
   "/copy",
   "/strategies",

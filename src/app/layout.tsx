@@ -6,8 +6,13 @@ import { AppProviders } from "@/providers/app-providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Trade",
-  description: "Professional trading platform foundation",
+  title: "TradeFlowZ",
+  description: "Deriv-powered trading dashboard, automation workspace, live markets, positions, and history.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/tradeflowz-logo.svg",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

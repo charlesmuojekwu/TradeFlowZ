@@ -4,6 +4,7 @@ import {
   Activity,
   BarChart3,
   Bot,
+  BrainCircuit,
   Copy,
   FlaskConical,
   Gauge,
@@ -50,6 +51,7 @@ const navSections: Array<{ label: string; items: NavItem[] }> = [
     items: [
       { href: "/trade", label: "Manual Trading", icon: Activity },
       { href: "/automation", label: "Automated Trading", icon: Bot },
+      { href: "/ai", label: "AI Trading", icon: BrainCircuit },
       { href: "/copy", label: "Copy Hub", icon: Copy },
     ],
   },
@@ -84,8 +86,8 @@ const mobileItems: NavItem[] = [
   { href: "/dashboard", label: "Home", icon: LayoutDashboard },
   { href: "/trade", label: "Trade", icon: Activity },
   { href: "/automation", label: "Automation", icon: Bot },
+  { href: "/ai", label: "AI", icon: BrainCircuit },
   { href: "/positions", label: "Positions", icon: ListChecks },
-  { href: "/strategies", label: "More", icon: MoreHorizontal },
 ];
 
 export function PlatformShell({ children }: PlatformShellProps) {

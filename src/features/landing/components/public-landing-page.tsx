@@ -2,8 +2,12 @@ import {
   Activity,
   ArrowRight,
   Blocks,
+  Bot,
+  BrainCircuit,
   CircleDot,
+  Copy,
   History,
+  LayoutDashboard,
   LockKeyhole,
   Radar,
   Route,
@@ -26,16 +30,16 @@ const registerHref = (returnTo = "/trade") =>
 
 const journey = [
   ["01", "Connect", "Create or connect a Deriv account through the hosted OAuth flow."],
-  ["02", "Explore", "Choose a supported market and follow live price movement."],
-  ["03", "Trade", "Configure Rise/Fall, review the quote, then execute in demo mode."],
-  ["04", "Track", "Monitor the open contract, live P/L, sell state, and settlement."],
+  ["02", "Dashboard", "Open account status, balances, positions, automations, and quick actions."],
+  ["03", "Trade", "Use the terminal, AI trading assistant, automation controls, and copy trading tools."],
+  ["04", "Track", "Monitor positions, automation runs, live P/L, settlement, and history."],
 ] as const;
 
 const capabilities = [
-  ["Discover", "Browse supported markets and live pricing."],
-  ["Trade", "Configure supported demo contracts."],
-  ["Monitor", "Follow open positions and live P/L."],
-  ["Review", "Inspect settled contracts and history."],
+  ["Dashboard", "Review accounts, balances, platform status, active automations, and quick actions."],
+  ["AI Trading", "Use AI-assisted planning to organize strategy ideas, market context, and risk controls."],
+  ["Automation", "Discover Deriv automation strategies, configure runs, and pause/resume/stop safely."],
+  ["Copy Trading", "Follow copy trading workflows from the platform shell with clear provider boundaries."],
 ] as const;
 
 export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnTo = "/dashboard" }: PublicLandingPageProps) {
@@ -50,13 +54,10 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
       <header className="sticky top-0 z-40 border-b border-[#273044] bg-[#080B12]/88 backdrop-blur-xl">
         <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8">
           <Link href="/" className="group flex items-center gap-3 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#818CF8]">
-            <span className="relative grid h-10 w-10 place-items-center overflow-hidden rounded-md border border-[#6366F1]/50 bg-[#151B29]">
-              <span className="absolute inset-x-2 top-2 h-px bg-[#818CF8]" />
-              <span className="font-mono text-sm font-bold text-[#F7F8FA]">TR</span>
-            </span>
+            <BrandMark className="h-11 w-11" />
             <span className="leading-tight">
-              <span className="block text-sm font-semibold tracking-[0.18em] text-white">TRADE</span>
-              <span className="hidden text-xs text-[#929BAD] sm:block">Market execution workspace</span>
+              <span className="block text-sm font-semibold tracking-[0.14em] text-white">TRADEFLOWZ</span>
+              <span className="hidden text-xs text-[#929BAD] sm:block">Powered by Deriv</span>
             </span>
           </Link>
 
@@ -69,6 +70,9 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
             </a>
             <a className="rounded-sm outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-[#818CF8]" href="#workflow">
               How It Works
+            </a>
+            <a className="rounded-sm outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-[#818CF8]" href="#dashboard">
+              Dashboard
             </a>
             <a className="rounded-sm outline-none transition hover:text-white focus-visible:ring-2 focus-visible:ring-[#818CF8]" href="#features">
               Features
@@ -101,6 +105,7 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
                 ["Product", "#product"],
                 ["Markets", "#markets"],
                 ["How It Works", "#workflow"],
+                ["Dashboard", "#dashboard"],
                 ["Features", "#features"],
               ].map(([label, href]) => (
                 <a key={label} className="block rounded px-3 py-2 text-sm text-[#AAB2C2] hover:bg-[#151B29] hover:text-white" href={href}>
@@ -129,14 +134,14 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
           ) : null}
           <p className="mx-auto inline-flex items-center gap-2 rounded border border-[#273044] bg-[#101521] px-3 py-1.5 text-xs font-medium uppercase tracking-[0.24em] text-[#AAB2C2]">
             <CircleDot className="h-3.5 w-3.5 text-[#818CF8]" aria-hidden="true" />
-            One Deriv-connected workspace
+            Powered by Deriv
           </p>
           <h1 className="mx-auto mt-7 max-w-4xl text-5xl font-semibold tracking-normal text-white sm:text-6xl lg:text-7xl">
-            From market movement to trade, in one focused workspace.
+            TradeFlowZ brings your Deriv trading dashboard into one focused workspace.
           </h1>
           <p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-[#AAB2C2]">
-            Watch real-time markets, inspect charts, price Rise/Fall contracts, execute demo trades, and track live
-            positions without jumping between tools.
+            Watch real-time markets, open the dashboard, plan trades with AI assistance, price Rise/Fall contracts, run
+            automation, explore copy trading, monitor live positions, and review history without jumping between tools.
           </p>
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
             <a
@@ -154,7 +159,7 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
             </a>
           </div>
           <p className="mt-5 text-sm text-[#929BAD]">
-            Securely connected through Deriv. We do not collect your Deriv password.
+            Powered by Deriv OAuth and secure sessions. We do not collect your Deriv password.
           </p>
         </div>
 
@@ -211,6 +216,32 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
         </div>
       </section>
 
+      <section id="dashboard" className="border-y border-[#273044] bg-[#0B0F18]">
+        <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+            <div>
+              <p className="text-sm font-medium uppercase tracking-[0.22em] text-[#818CF8]">Dashboard shell</p>
+              <h2 className="mt-3 text-3xl font-semibold text-white sm:text-5xl">
+                More than a trade ticket: a growing Deriv platform workspace.
+              </h2>
+              <p className="mt-5 text-[#AAB2C2]">
+                The protected app now includes dashboard overview, automation, contract workspaces, strategy lab,
+                AI trading, copy-trading workflows, positions, history, and the manual terminal.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <PlatformTile icon={LayoutDashboard} title="Dashboard overview" description="Balances, session state, platform health, recent activity, quick actions, and active automation runs." />
+              <PlatformTile icon={BrainCircuit} title="AI trading" description="AI-assisted strategy planning, market context review, and risk-control checks before provider-confirmed execution." />
+              <PlatformTile icon={Bot} title="Trading automation" description="Real Deriv strategy discovery, account-scoped runs, restoration, run monitor, pause, resume, and stop controls." />
+              <PlatformTile icon={Copy} title="Copy trading" description="A dedicated copy trading area for follower workflows, provider boundaries, and future secure execution infrastructure." />
+              <PlatformTile icon={Split} title="Contract workspaces" description="Rise/Fall plus dedicated shells for accumulators, digits, multipliers, and related provider rules." />
+              <PlatformTile icon={History} title="Positions and history" description="Open-position monitoring, settlement states, provider P/L, filtering, pagination, and responsive history views." />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="features" className="border-y border-[#273044] bg-[#0B0F18]">
         <div className="mx-auto max-w-7xl px-5 py-16 lg:px-8">
           <div className="max-w-3xl">
@@ -221,10 +252,10 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
           <div className="mt-10 grid auto-rows-[minmax(170px,auto)] gap-4 lg:grid-cols-4">
             <FeaturePanel
               className="lg:col-span-2 lg:row-span-2"
-              icon={Radar}
-              title="Real-time market workspace"
-              description="Discover supported Deriv markets, select Volatility 100, load history, and keep live ticks isolated from broad app state."
-              stat="Live ticks"
+              icon={LayoutDashboard}
+              title="Dashboard-first platform"
+              description="Account overview, balances, connection state, active automations, quick actions, and cached trading activity sit behind the public entry flow."
+              stat="Dashboard"
             />
             <FeaturePanel
               icon={LockKeyhole}
@@ -240,6 +271,30 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
             />
             <FeaturePanel
               className="lg:col-span-2"
+              icon={BrainCircuit}
+              title="AI trading assistant"
+              description="AI support helps organize market context, strategy drafts, and risk settings while keeping quotes, account state, and execution provider-authoritative."
+              stat="AI"
+            />
+            <FeaturePanel
+              icon={Bot}
+              title="Real Deriv automation"
+              description="Provider strategies are discovered from Deriv, restored after reconnect, and controlled through account-scoped run actions."
+              stat="Auto"
+            />
+            <FeaturePanel
+              icon={Copy}
+              title="Copy trading workspace"
+              description="Copy trading is surfaced as a first-class platform area for follower controls, account clarity, risk visibility, and future backend-secured execution."
+              stat="Copy"
+            />
+            <FeaturePanel
+              icon={Radar}
+              title="Real-time market workspace"
+              description="Discover supported Deriv markets, select Volatility 100, load history, and keep live ticks isolated from broad app state."
+              stat="Live ticks"
+            />
+            <FeaturePanel
               icon={History}
               title="Trade history"
               description="Review provider-sourced closed contracts with market, direction, stake, payout, status, and timing filters."
@@ -273,10 +328,10 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
           </div>
           <div className="rounded-lg border border-[#273044] bg-[#101521] p-6">
             <WalletCards className="h-6 w-6 text-[#818CF8]" aria-hidden="true" />
-            <h2 className="mt-5 text-2xl font-semibold text-white">Demo-first execution</h2>
+            <h2 className="mt-5 text-2xl font-semibold text-white">Account-aware execution</h2>
             <p className="mt-3 text-sm leading-6 text-[#AAB2C2]">
-              Accounts are clearly labeled DEMO or REAL. Demo execution is enabled; real-money buy execution remains
-              blocked in this frontend stage.
+              Accounts are clearly labeled, balances remain provider-authoritative, and trading actions are designed to
+              respect account type, connection state, quote freshness, and provider confirmation.
             </p>
           </div>
         </div>
@@ -306,19 +361,26 @@ export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnT
       <footer className="border-t border-[#273044] bg-[#060912]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr] lg:px-8">
           <div>
-            <p className="font-mono text-lg font-semibold tracking-[0.2em] text-white">TRADE</p>
+            <div className="flex items-center gap-3">
+              <BrandMark className="h-12 w-12" />
+              <div>
+                <p className="font-mono text-lg font-semibold tracking-[0.12em] text-white">TRADEFLOWZ</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#929BAD]">Powered by Deriv</p>
+              </div>
+            </div>
             <p className="mt-3 max-w-sm text-sm leading-6 text-[#929BAD]">
-              A Deriv-connected workspace for market discovery, demo execution, live positions, and history.
+              A Deriv-powered workspace for dashboard overview, market discovery, AI-assisted planning, trading
+              execution, automation, copy trading, live positions, and history.
             </p>
           </div>
-          <FooterColumn title="Platform" links={[["Product", "#product"], ["How It Works", "#workflow"], ["Trading App", "/trade"]]} />
+          <FooterColumn title="Platform" links={[["Product", "#product"], ["Dashboard", "#dashboard"], ["Trading App", "/trade"]]} />
           <FooterColumn title="Resources" links={[["Documentation", undefined], ["Help / Contact", undefined]]} />
           <FooterColumn title="Legal" links={[["Terms", undefined], ["Privacy", undefined], ["Risk Disclosure", "#risk"]]} />
         </div>
         <div id="risk" className="mx-auto max-w-7xl border-t border-[#273044] px-5 py-6 text-sm leading-6 text-[#AAB2C2] lg:px-8">
           <strong className="text-white">Risk disclosure:</strong> Trading options and other financial products involves
-          substantial risk. Prices can move quickly, contracts can expire without value, and you may lose money. Use demo
-          accounts to understand the workflow before considering real-money trading.
+          substantial risk. Prices can move quickly, contracts can expire without value, and you may lose money. Make
+          sure you understand the workflow and risks before trading.
         </div>
       </footer>
     </main>
@@ -377,6 +439,40 @@ function FeaturePanel({
   );
 }
 
+function PlatformTile({
+  icon: Icon,
+  title,
+  description,
+}: {
+  icon: typeof Activity;
+  title: string;
+  description: string;
+}) {
+  return (
+    <article className="rounded-lg border border-[#273044] bg-[#101521] p-5 transition hover:-translate-y-0.5 hover:border-[#6366F1]/70 motion-reduce:hover:translate-y-0">
+      <Icon className="h-5 w-5 text-[#818CF8]" aria-hidden="true" />
+      <h3 className="mt-5 text-lg font-semibold text-white">{title}</h3>
+      <p className="mt-3 text-sm leading-6 text-[#929BAD]">{description}</p>
+    </article>
+  );
+}
+
+function BrandMark({ className = "h-10 w-10" }: { className?: string }) {
+  return (
+    <span
+      className={`relative grid place-items-center overflow-hidden rounded-md border border-[#273044] bg-[#101521] shadow-[0_0_0_1px_rgba(99,102,241,0.20)] ${className}`}
+      aria-hidden="true"
+    >
+      <span className="absolute inset-0 bg-[radial-gradient(circle_at_75%_18%,rgba(255,68,79,0.35),transparent_28%),radial-gradient(circle_at_18%_85%,rgba(34,197,94,0.28),transparent_32%)]" />
+      <svg className="relative h-8 w-8" viewBox="0 0 64 64" fill="none">
+        <path d="M12 17h40v8H36v27h-8V25H12V17Z" fill="#F7F8FA" />
+        <path d="M42 10h11v11" stroke="#FF444F" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M16 49c12-2 22-10 34-30" stroke="#22C55E" strokeWidth="4" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
+}
+
 function TerminalPreview() {
   return (
     <div
@@ -391,7 +487,7 @@ function TerminalPreview() {
           <span className="ml-3 font-mono text-xs text-[#929BAD]">app.trade/workspace</span>
         </div>
         <div className="hidden gap-2 text-xs text-[#929BAD] sm:flex">
-          <span className="rounded border border-[#273044] px-2 py-1">DEMO</span>
+          <span className="rounded border border-[#273044] px-2 py-1">LIVE</span>
           <span className="rounded border border-[#273044] px-2 py-1">Connected</span>
         </div>
       </div>

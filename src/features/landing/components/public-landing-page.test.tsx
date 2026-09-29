@@ -11,9 +11,14 @@ describe("PublicLandingPage", () => {
   it("renders accessible public sections and OAuth entry CTAs", () => {
     render(<PublicLandingPage isAuthenticated={false} returnTo="/positions" />);
 
-    expect(screen.getByRole("heading", { name: /From market movement to trade/i })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: /TradeFlowZ brings your Deriv trading dashboard/i })).toBeTruthy();
     expect(screen.getByRole("heading", { name: /A clean path from account/i })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: /More than a trade ticket/i })).toBeTruthy();
     expect(screen.getByRole("heading", { name: /Purpose-built around implemented capability/i })).toBeTruthy();
+    expect(screen.getAllByText(/Powered by Deriv/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("heading", { name: /AI trading/i }).length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { name: /Trading automation/i })).toBeTruthy();
+    expect(screen.getAllByRole("heading", { name: /Copy trading/i }).length).toBeGreaterThan(0);
     expect(screen.getByText(/Risk disclosure:/i)).toBeTruthy();
 
     const getStartedLinks = screen.getAllByRole("link", { name: /Get Started/i });

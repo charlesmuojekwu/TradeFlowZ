@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 96" role="img" aria-labelledby="title">
+  <title id="title">TradeFlowZ</title>
+  <rect width="320" height="96" rx="18" fill="#080B12"/>
+  <g transform="translate(18 18)">
+    <rect width="60" height="60" rx="14" fill="#101521" stroke="#273044"/>
+    <path d="M12 15h36v8H34v24h-8V23H12z" fill="#F7F8FA"/>
+    <path d="M39 9h10v10" fill="none" stroke="#FF444F" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 47c11-2 20-9 31-27" fill="none" stroke="#22C55E" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <text x="94" y="47" fill="#F7F8FA" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800" letter-spacing="0">TradeFlowZ</text>
+  <text x="96" y="68" fill="#929BAD" font-family="Inter, Arial, sans-serif" font-size="12" font-weight="600" letter-spacing="2">POWERED BY DERIV</text>
+</svg>

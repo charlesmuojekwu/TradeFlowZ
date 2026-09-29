@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Bot, Copy, FlaskConical, LineChart } from "lucide-react";
+import { ArrowRight, Bot, BrainCircuit, Copy, FlaskConical, LineChart } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -18,6 +18,7 @@ type DashboardSession = AccountSession & {
 
 const quickActions = [
   { href: "/trade", label: "Trade manually", icon: LineChart },
+  { href: "/ai", label: "AI trading", icon: BrainCircuit },
   { href: "/automation", label: "Start automation", icon: Bot },
   { href: "/contracts", label: "Explore contracts", icon: ArrowRight },
   { href: "/strategies/lab", label: "Open Strategy Lab", icon: FlaskConical },
@@ -156,6 +157,7 @@ export function DashboardOverview() {
                 <StatusRow label="Market data" value="Public Deriv provider" />
                 <StatusRow label="Trading socket" value={authenticatedConnectionStatus} />
                 <StatusRow label="Automation" value={`${activeAutomationRuns.length} active`} />
+                <StatusRow label="AI trading" value="Assistant workspace" />
                 <StatusRow label="Copy trading" value="Backend required" />
               </div>
             </Panel>
@@ -203,6 +205,19 @@ export function DashboardOverview() {
                   </Button>
                 );
               })}
+            </div>
+          </Panel>
+
+          <Panel className="rounded-md p-5">
+            <div className="flex items-start gap-3">
+              <BrainCircuit className="mt-0.5 h-5 w-5 text-primary" />
+              <div>
+                <h2 className="font-semibold">AI trading assistant</h2>
+                <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                  AI trading helps structure strategy ideas, market context, and risk settings. Execution still requires
+                  provider validation, fresh quotes, and explicit confirmation.
+                </p>
+              </div>
             </div>
           </Panel>
 
