@@ -44,17 +44,26 @@ export function useMarketChartData(market?: Market) {
       setConnectionStatus("connecting");
 
       try {
-        const history = await providerBundle.marketProvider.getHistoricalPrices({
-          symbol: selectedMarket.symbol,
-          count: historyCount,
-        });
+        try {
+          const history = await providerBundle.marketProvider.getHistoricalPrices({
+            symbol: selectedMarket.symbol,
+            count: historyCount,
+          });
 
-        if (!isCurrent) {
-          return;
+          if (!isCurrent) {
+            return;
+          }
+
+          latestPointsRef.current = history;
+          setHistoricalData(history);
+        } catch (caught) {
+          if (!isCurrent) {
+            return;
+          }
+
+          setError(toAppError(caught));
         }
 
-        latestPointsRef.current = history;
-          setHistoricalData(history);
         setIsLoading(false);
 
         const nextUnsubscribe = await providerBundle.marketProvider.subscribeToTicks(
@@ -69,6 +78,7 @@ export function useMarketChartData(market?: Market) {
               { time: tick.epoch, value: tick.price },
             ];
             setLiveTick(tick);
+            setError(undefined);
             setConnectionStatus("connected");
           },
           (providerError) => {

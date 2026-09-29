@@ -104,7 +104,7 @@ npm install
 Public variables are safe to expose to browser code:
 
 ```env
-NEXT_PUBLIC_TRADING_PROVIDER=mock
+NEXT_PUBLIC_TRADING_PROVIDER=deriv
 NEXT_PUBLIC_APP_NAME=Trade
 NEXT_PUBLIC_DERIV_PUBLIC_WS_URL=wss://api.derivws.com/trading/v1/options/ws/public
 ```
@@ -113,7 +113,7 @@ Server-only variables must not use `NEXT_PUBLIC_`:
 
 ```env
 DERIV_CLIENT_ID=your_deriv_oauth_client_id
-DERIV_REDIRECT_URI=http://localhost:3000/api/auth/callback
+DERIV_REDIRECT_URI=http://localhost:3000/auth/callback
 DERIV_API_BASE_URL=https://api.derivws.com
 DERIV_AUTH_BASE_URL=https://auth.deriv.com
 DERIV_OAUTH_SCOPES=trade account_manage
@@ -144,7 +144,7 @@ http://localhost:3000/trade
 
 ## Mock Provider Mode
 
-Mock mode is the default:
+Mock mode is available for local UI development and automated tests:
 
 ```env
 NEXT_PUBLIC_TRADING_PROVIDER=mock
@@ -156,7 +156,7 @@ Mock data is intentionally isolated under `src/providers/mock` and should not be
 
 ## Deriv Provider Mode
 
-Use Deriv mode with:
+Deriv mode is the application default. Keep this value in Vercel and local environments when testing real market data:
 
 ```env
 NEXT_PUBLIC_TRADING_PROVIDER=deriv
@@ -182,7 +182,7 @@ Authentication starts at:
 The callback route:
 
 ```text
-/api/auth/callback
+/auth/callback
 ```
 
 validates OAuth state, exchanges the authorization code with the PKCE verifier, encrypts the Deriv access token, and stores it in an HttpOnly session cookie.
@@ -254,11 +254,12 @@ Deploy as a standard Next.js application.
 Production requirements:
 
 - set `NODE_ENV=production`
+- set `NEXT_PUBLIC_TRADING_PROVIDER=deriv`
 - set a strong `DERIV_SESSION_SECRET`
-- configure the Deriv OAuth redirect URI to match the deployed `/api/auth/callback`
+- configure the Deriv OAuth redirect URI to match the deployed `/auth/callback`
 - use HTTPS so HttpOnly secure cookies work correctly
 - keep all Deriv server credentials out of `NEXT_PUBLIC_` variables
-- choose `NEXT_PUBLIC_TRADING_PROVIDER=deriv` only when Deriv OAuth/API configuration is present
+- choose `NEXT_PUBLIC_TRADING_PROVIDER=mock` only for local UI development or automated tests
 
 ## Known Limitations
 

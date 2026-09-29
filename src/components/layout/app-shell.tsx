@@ -37,12 +37,11 @@ export function AppShell({ activeSection = "trade" }: AppShellProps) {
       </header>
       <section className="mx-auto max-w-7xl px-6 py-10">
         <div className="max-w-3xl">
-          <p className="text-sm font-medium uppercase text-muted-foreground">Phase 1 foundation</p>
-          <h1 className="mt-3 text-3xl font-semibold tracking-normal">Trading architecture is ready.</h1>
+          <p className="text-sm font-medium uppercase text-muted-foreground">Trading workspace</p>
+          <h1 className="mt-3 text-3xl font-semibold tracking-normal">Open the Deriv-connected terminal.</h1>
           <p className="mt-4 text-muted-foreground">
-            The app shell is intentionally minimal for this phase. Provider interfaces, mock provider
-            structure, stores, domain models, configuration, and shared utilities are in place for the
-            visual trading workspace in Phase 2.
+            Use the primary trading routes to view real market discovery, live chart data, account balances,
+            positions, and provider-sourced history.
           </p>
         </div>
       </section>

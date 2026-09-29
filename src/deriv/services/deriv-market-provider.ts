@@ -45,7 +45,6 @@ export class DerivMarketProvider implements MarketProvider {
       end: "latest",
       style: "ticks",
       adjust_start_time: 1,
-      subscribe: 0,
       ...(request.granularity ? { granularity: request.granularity } : {}),
     });
 

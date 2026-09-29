@@ -51,7 +51,6 @@ describe("DerivMarketProvider", () => {
       end: "latest",
       style: "ticks",
       adjust_start_time: 1,
-      subscribe: 0,
     });
   });
 

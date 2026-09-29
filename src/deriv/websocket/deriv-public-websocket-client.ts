@@ -124,6 +124,7 @@ export class DerivPublicWebSocketClient {
       };
 
       socket.onclose = () => {
+        this.connectPromise = undefined;
         this.stopHeartbeat();
         this.rejectPendingRequests(
           new AppError({

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const publicEnvSchema = z.object({
-  NEXT_PUBLIC_TRADING_PROVIDER: z.enum(["mock", "deriv", "api"]).default("mock"),
+  NEXT_PUBLIC_TRADING_PROVIDER: z.enum(["mock", "deriv", "api"]).default("deriv"),
   NEXT_PUBLIC_APP_NAME: z.string().default("Trade"),
   NEXT_PUBLIC_DERIV_PUBLIC_WS_URL: z
     .string()
