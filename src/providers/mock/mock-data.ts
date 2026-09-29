@@ -66,6 +66,7 @@ export const mockAccounts: TradingAccount[] = [
     currency: "USD",
     status: "active",
     balance: "10000",
+    displayName: "Mock Demo",
   },
   {
     id: "REAL-MOCK-001",
@@ -73,6 +74,7 @@ export const mockAccounts: TradingAccount[] = [
     currency: "USD",
     status: "active",
     balance: "0",
+    displayName: "Mock Real",
   },
 ];
 

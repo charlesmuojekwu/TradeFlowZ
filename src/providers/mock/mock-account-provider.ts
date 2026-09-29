@@ -1,11 +1,11 @@
 import type { AccountProvider, BalanceHandler } from "@/providers/interfaces";
-import type { TradingAccount, Unsubscribe } from "@/types";
+import type { AccountSession, TradingAccount, Unsubscribe } from "@/types";
 
 import { mockAccounts } from "./mock-data";
 
 export class MockAccountProvider implements AccountProvider {
-  async getSession(): Promise<{ isAuthenticated: boolean }> {
-    return { isAuthenticated: true };
+  async getSession(): Promise<AccountSession> {
+    return { isAuthenticated: true, subject: "Mock Trader" };
   }
 
   async getAccounts(): Promise<TradingAccount[]> {

@@ -1,19 +1,18 @@
 import { AppError } from "@/lib/errors";
 import type { AccountProvider, BalanceHandler } from "@/providers/interfaces";
-import type { TradingAccount, Unsubscribe } from "@/types";
+import type { AccountSession, TradingAccount, Unsubscribe } from "@/types";
 
-type SessionResponse = {
-  isAuthenticated: boolean;
-  expiresAt?: number;
+type SessionResponse = AccountSession & {
   accounts?: TradingAccount[];
 };
 
 export class DerivAccountProvider implements AccountProvider {
-  async getSession(): Promise<{ isAuthenticated: boolean; expiresAt?: number }> {
+  async getSession(): Promise<AccountSession> {
     const session = await this.fetchSession();
     return {
       isAuthenticated: session.isAuthenticated,
       expiresAt: session.expiresAt,
+      subject: session.subject,
     };
   }
 

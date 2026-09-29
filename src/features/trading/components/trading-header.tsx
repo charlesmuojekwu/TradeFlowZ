@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select } from "@/components/ui/select";
 import { formatMoney } from "@/lib/money";
 import type { BalanceStatus } from "@/stores/account-store";
-import type { ConnectionStatus, TradingAccount } from "@/types";
+import type { AccountSession, ConnectionStatus, TradingAccount } from "@/types";
 
 import { ConnectionPill } from "./connection-pill";
 
@@ -22,6 +22,7 @@ type TradingHeaderProps = {
   balance?: string;
   balanceCurrency?: string;
   balanceStatus: BalanceStatus;
+  session?: AccountSession;
   connectionStatus: ConnectionStatus;
   activeSection: "trade" | "positions" | "history";
   onSelectAccount: (accountId: string) => void;
@@ -42,6 +43,7 @@ export function TradingHeader({
   balance,
   balanceCurrency,
   balanceStatus,
+  session,
   connectionStatus,
   activeSection,
   onSelectAccount,
@@ -129,11 +131,44 @@ export function TradingHeader({
             {isDark ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </Button>
           {isAuthenticated ? (
-            <Button asChild variant="outline" size="icon" aria-label="Logout">
-              <a href="/api/auth/logout">
-                <LogOut className="h-4 w-4" />
-              </a>
-            </Button>
+            <details className="group relative">
+              <summary className="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-md border border-border bg-background text-sm outline-none transition hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring [&::-webkit-details-marker]:hidden">
+                <UserRound className="h-4 w-4" />
+                <span className="sr-only">Account menu</span>
+              </summary>
+              <div className="absolute right-0 top-11 z-50 w-72 rounded-md border border-border bg-card p-3 text-sm shadow-xl">
+                <div>
+                  <p className="font-semibold">{selectedAccount?.displayName ?? "Deriv account"}</p>
+                  <p className="mt-1 font-mono text-xs text-muted-foreground">{selectedAccount?.id ?? session?.subject}</p>
+                </div>
+                {selectedAccount ? (
+                  <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <dt className="text-muted-foreground">Type</dt>
+                      <dd className="mt-0.5 font-semibold uppercase">{selectedAccount.type}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Currency</dt>
+                      <dd className="mt-0.5 font-semibold">{selectedAccount.currency}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Status</dt>
+                      <dd className="mt-0.5 capitalize">{selectedAccount.status}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted-foreground">Session</dt>
+                      <dd className="mt-0.5">{session?.expiresAt ? formatSessionExpiry(session.expiresAt) : "Active"}</dd>
+                    </div>
+                  </dl>
+                ) : null}
+                <Button asChild variant="outline" size="sm" className="mt-3 w-full">
+                  <a href="/api/auth/logout">
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </a>
+                </Button>
+              </div>
+            </details>
           ) : (
             <Button variant="outline" size="icon" aria-label="Profile menu">
               <UserRound className="h-4 w-4" />
@@ -169,6 +204,15 @@ export function TradingHeader({
       ) : null}
     </header>
   );
+}
+
+function formatSessionExpiry(expiresAt: number) {
+  return new Intl.DateTimeFormat(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    month: "short",
+    day: "numeric",
+  }).format(expiresAt);
 }
 
 function getBalanceLabel(status: BalanceStatus) {

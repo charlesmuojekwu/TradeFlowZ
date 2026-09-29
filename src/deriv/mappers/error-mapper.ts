@@ -35,12 +35,12 @@ function classifyDerivError(originalCode: string | undefined, providerMessage: s
     return appError("TRADE_REJECTED", "Sell unavailable", "This contract can no longer be sold.", false);
   }
 
-  if (includesAny(normalized, ["contract", "barrier", "duration", "stake", "validation"])) {
-    return appError("CONTRACT_UNAVAILABLE", "Contract unavailable", "This contract configuration is no longer available.", true);
+  if (includesAny(normalized, ["proposal", "quote", "price", "spot", "rate limit"])) {
+    return appError("PRICE_UNAVAILABLE", "Quote expired", "A fresh quote is required before buying. Wait for pricing to refresh and try again.", true);
   }
 
-  if (includesAny(normalized, ["proposal", "quote", "price", "spot", "rate limit"])) {
-    return appError("PRICE_UNAVAILABLE", "Price unavailable", "A fresh quote is not available right now.", true);
+  if (includesAny(normalized, ["contract", "barrier", "duration", "stake", "validation"])) {
+    return appError("CONTRACT_UNAVAILABLE", "Contract unavailable", "This contract configuration is no longer available.", true);
   }
 
   if (includesAny(normalized, ["timeout", "connection", "disconnect", "network", "service unavailable", "gateway"])) {

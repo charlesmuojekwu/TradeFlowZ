@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { ConnectionStatus, TradingAccount } from "@/types";
+import type { AccountSession, ConnectionStatus, TradingAccount } from "@/types";
 
 export type BalanceStatus = "idle" | "loading" | "live" | "stale" | "error";
 
@@ -10,8 +10,10 @@ type AccountState = {
   balance?: TradingAccount["balance"];
   balanceCurrency?: TradingAccount["currency"];
   balanceStatus: BalanceStatus;
+  session?: AccountSession;
   authenticatedConnectionStatus: ConnectionStatus;
   authenticatedConnectionError?: string;
+  setSession: (session: AccountSession) => void;
   setAccounts: (accounts: TradingAccount[]) => void;
   selectAccount: (accountId: string) => void;
   setBalance: (balance: TradingAccount["balance"], currency?: TradingAccount["currency"]) => void;
@@ -24,6 +26,7 @@ export const useAccountStore = create<AccountState>((set) => ({
   accounts: [],
   balanceStatus: "idle",
   authenticatedConnectionStatus: "idle",
+  setSession: (session) => set({ session }),
   setAccounts: (accounts) =>
     set((state) => {
       const selectedAccount = accounts.find((account) => account.id === state.selectedAccountId) ?? accounts[0];
@@ -62,6 +65,7 @@ export const useAccountStore = create<AccountState>((set) => ({
       balance: undefined,
       balanceCurrency: undefined,
       balanceStatus: "idle",
+      session: undefined,
       authenticatedConnectionStatus: "idle",
       authenticatedConnectionError: undefined,
     }),

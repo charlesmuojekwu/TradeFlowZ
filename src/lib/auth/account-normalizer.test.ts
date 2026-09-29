@@ -12,6 +12,7 @@ describe("Deriv account normalizer", () => {
           currency: "USD",
           status: "active",
           balance: 10000,
+          display_name: "Demo Options",
         },
         {
           id: "real-123",
@@ -27,6 +28,7 @@ describe("Deriv account normalizer", () => {
         currency: "USD",
         status: "active",
         balance: "10000",
+        displayName: "Demo Options",
       },
       {
         id: "real-123",

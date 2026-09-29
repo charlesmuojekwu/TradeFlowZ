@@ -34,4 +34,12 @@ describe("mapDerivError", () => {
       retryable: true,
     });
   });
+
+  it("treats proposal pricing errors as stale quotes before generic contract validation", () => {
+    expect(mapDerivError({ code: "ContractBuyValidationError", message: "This contract proposal price is no longer valid" })).toMatchObject({
+      code: "PRICE_UNAVAILABLE",
+      title: "Quote expired",
+      retryable: true,
+    });
+  });
 });

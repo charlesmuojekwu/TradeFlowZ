@@ -63,6 +63,7 @@ export function TradingTerminal({ activeSection = "trade" }: TradingTerminalProp
         balance={workspace.balance}
         balanceCurrency={workspace.balanceCurrency}
         balanceStatus={workspace.balanceStatus}
+        session={workspace.session}
         connectionStatus={workspace.connectionStatus}
         activeSection={activeSection}
         onSelectAccount={workspace.selectAccount}

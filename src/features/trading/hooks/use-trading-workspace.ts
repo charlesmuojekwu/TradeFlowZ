@@ -28,9 +28,11 @@ export function useTradingWorkspace() {
     balance,
     balanceCurrency,
     balanceStatus,
+    session,
     authenticatedConnectionStatus,
     authenticatedConnectionError,
     setAccounts,
+    setSession,
     selectAccount,
   } = useAccountStore();
   const {
@@ -236,6 +238,7 @@ export function useTradingWorkspace() {
 
         setMarkets(marketList);
         setAuthenticated(session.isAuthenticated);
+        setSession(session);
         setAccounts(accountList);
         setConnectionStatus("connected");
 
@@ -256,7 +259,7 @@ export function useTradingWorkspace() {
     return () => {
       isMounted = false;
     };
-  }, [setAccounts, setAuthenticated, setConnectionStatus, setMarkets]);
+  }, [setAccounts, setAuthenticated, setConnectionStatus, setMarkets, setSession]);
 
   useEffect(() => {
     return clearPositionSubscriptions;
@@ -402,6 +405,17 @@ export function useTradingWorkspace() {
       return;
     }
 
+    if (!isProposalFresh(currentProposal)) {
+      setProposal(undefined, "stale");
+      setError(new AppError({
+        code: "PRICE_UNAVAILABLE",
+        title: "Quote expired",
+        message: "That quote has expired. Wait for a fresh price before buying.",
+        retryable: true,
+      }));
+      return;
+    }
+
     if (selectedAccount.type !== "demo") {
       setError(new AppError({
         code: "TRADE_REJECTED",
@@ -447,7 +461,11 @@ export function useTradingWorkspace() {
       setExecutionState("success");
       window.setTimeout(() => setExecutionState("idle"), 900);
     } catch (caught) {
-      setError(toAppError(caught));
+      const appError = toAppError(caught);
+      if (appError.code === "PRICE_UNAVAILABLE" || appError.code === "CONTRACT_UNAVAILABLE") {
+        setProposal(undefined, "stale");
+      }
+      setError(appError);
       setExecutionState("error");
     }
   }, [
@@ -460,6 +478,7 @@ export function useTradingWorkspace() {
     selectedAccount,
     selectedMarket,
     setExecutionState,
+    setProposal,
     subscribeToPositionUpdates,
     upsertPosition,
   ]);
@@ -514,6 +533,7 @@ export function useTradingWorkspace() {
     balance,
     balanceCurrency,
     balanceStatus,
+    session,
     closePosition,
     connectionStatus,
     currentProposal,
@@ -544,6 +564,10 @@ export function useTradingWorkspace() {
     setStake,
     toggleFavorite,
   };
+}
+
+function isProposalFresh(proposal: { receivedAt: number }) {
+  return Math.floor(Date.now() / 1000) - proposal.receivedAt < proposalStaleAfterMs / 1000;
 }
 
 function clampDuration(duration: number, min?: number, max?: number) {

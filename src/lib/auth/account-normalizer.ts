@@ -15,6 +15,7 @@ export function normalizeDerivAccount(record: DerivAccountRecord): TradingAccoun
     currency: stringFrom(record.currency) ?? "USD",
     status: normalizeStatus(record.status),
     balance: stringFrom(record.balance ?? record.current_balance) ?? "0",
+    displayName: stringFrom(record.display_name ?? record.name ?? record.nickname),
   };
 }
 
