@@ -18,6 +18,12 @@ type TokenResponse = {
   token_type?: string;
 };
 
+class OAuthTokenExchangeError extends Error {
+  constructor(readonly status: number) {
+    super("Deriv token exchange failed.");
+  }
+}
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const error = requestUrl.searchParams.get("error");
@@ -84,7 +90,11 @@ export async function GET(request: NextRequest) {
     });
 
     return response;
-  } catch {
+  } catch (caught) {
+    if (caught instanceof OAuthTokenExchangeError) {
+      return redirectWithStatus(request, "token", "/", `exchange_${caught.status}`);
+    }
+
     return redirectWithStatus(request, "token");
   }
 }
@@ -118,16 +128,19 @@ async function exchangeCodeForToken({
   });
 
   if (!response.ok) {
-    throw new Error("Deriv token exchange failed.");
+    throw new OAuthTokenExchangeError(response.status);
   }
 
   return (await response.json()) as TokenResponse;
 }
 
-function redirectWithStatus(request: NextRequest, status: string, returnTo = "/") {
+function redirectWithStatus(request: NextRequest, status: string, returnTo = "/", reason?: string) {
   const redirectUrl = new URL(status === "success" ? normalizeReturnPath(returnTo) : "/", request.url);
   if (status !== "success") {
     redirectUrl.searchParams.set("auth", status);
+    if (reason) {
+      redirectUrl.searchParams.set("reason", reason);
+    }
   }
   return NextResponse.redirect(redirectUrl);
 }

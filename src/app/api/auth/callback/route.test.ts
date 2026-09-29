@@ -71,6 +71,21 @@ describe("/auth/callback OAuth handling", () => {
     expect(response.headers.get("location")).toBe("http://localhost:3000/?auth=state");
   });
 
+  it("surfaces the token exchange status without exposing OAuth secrets", async () => {
+    vi.stubEnv("DERIV_CLIENT_ID", "12345");
+    vi.stubEnv("DERIV_AUTH_BASE_URL", "https://auth.deriv.com");
+    vi.stubEnv("DERIV_SESSION_SECRET", "0123456789abcdef0123456789abcdef");
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: false,
+      status: 400,
+    } as Response);
+
+    const response = await GET(callbackRequest("/trade"));
+
+    expect(response.headers.get("location")).toBe("http://localhost:3000/?auth=token&reason=exchange_400");
+    expect(response.headers.get("location")).not.toContain("auth-code");
+  });
+
   it("reports missing session configuration before attempting token exchange", async () => {
     vi.stubEnv("DERIV_CLIENT_ID", "12345");
     vi.stubEnv("DERIV_AUTH_BASE_URL", "https://auth.deriv.com");

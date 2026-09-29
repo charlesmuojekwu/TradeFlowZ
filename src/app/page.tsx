@@ -2,7 +2,7 @@ import { PublicLandingPage } from "@/features/landing/components/public-landing-
 import { getCurrentSession, normalizeReturnPath } from "@/lib/auth";
 
 type HomePageProps = {
-  searchParams?: Promise<{ auth?: string; returnTo?: string }>;
+  searchParams?: Promise<{ auth?: string; reason?: string; returnTo?: string }>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
@@ -13,6 +13,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     <PublicLandingPage
       authStatus={params?.auth}
       isAuthenticated={Boolean(session)}
+      reason={params?.reason}
       returnTo={normalizeReturnPath(params?.returnTo)}
     />
   );

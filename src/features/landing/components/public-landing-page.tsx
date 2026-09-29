@@ -16,6 +16,7 @@ import Link from "next/link";
 type PublicLandingPageProps = {
   authStatus?: string;
   isAuthenticated: boolean;
+  reason?: string;
   returnTo?: string;
 };
 
@@ -37,10 +38,10 @@ const capabilities = [
   ["Review", "Inspect settled contracts and history."],
 ] as const;
 
-export function PublicLandingPage({ authStatus, isAuthenticated, returnTo = "/trade" }: PublicLandingPageProps) {
+export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnTo = "/trade" }: PublicLandingPageProps) {
   const primaryHref = isAuthenticated ? "/trade" : registerHref(returnTo);
   const secondaryHref = isAuthenticated ? "/trade" : signInHref(returnTo);
-  const authMessage = getAuthMessage(authStatus);
+  const authMessage = getAuthMessage(authStatus, reason);
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#080B12] text-[#F7F8FA]">
@@ -530,7 +531,7 @@ function FooterColumn({ title, links }: { title: string; links: Array<[string, s
   );
 }
 
-function getAuthMessage(status?: string) {
+function getAuthMessage(status?: string, reason?: string) {
   if (!status) {
     return undefined;
   }
@@ -540,7 +541,9 @@ function getAuthMessage(status?: string) {
     error: "Deriv returned an authentication error. Please try signing in again.",
     session: "Authentication completed, but the app could not create a secure session. Check DERIV_SESSION_SECRET in the deployment environment.",
     state: "Authentication expired or could not be verified. Please start sign-in again from this page.",
-    token: "Authentication could not be completed with Deriv. Check the OAuth redirect URI and server configuration.",
+    token: reason
+      ? `Authentication could not be completed with Deriv (${reason}). Check the OAuth redirect URI and server configuration.`
+      : "Authentication could not be completed with Deriv. Check the OAuth redirect URI and server configuration.",
   };
 
   return messages[status] ?? "Authentication could not be completed. Please try again.";
