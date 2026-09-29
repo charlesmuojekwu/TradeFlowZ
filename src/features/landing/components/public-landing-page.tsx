@@ -38,7 +38,7 @@ const capabilities = [
   ["Review", "Inspect settled contracts and history."],
 ] as const;
 
-export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnTo = "/trade" }: PublicLandingPageProps) {
+export function PublicLandingPage({ authStatus, isAuthenticated, reason, returnTo = "/dashboard" }: PublicLandingPageProps) {
   const primaryHref = isAuthenticated ? "/trade" : registerHref(returnTo);
   const secondaryHref = isAuthenticated ? "/trade" : signInHref(returnTo);
   const authMessage = getAuthMessage(authStatus, reason);

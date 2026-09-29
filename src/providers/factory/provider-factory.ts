@@ -1,8 +1,8 @@
 import { env } from "@/config/env";
-import { DerivAccountProvider, DerivMarketProvider, DerivTradingProvider } from "@/deriv/services";
+import { DerivAccountProvider, DerivAutomationProvider, DerivMarketProvider, DerivTradingProvider } from "@/deriv/services";
 import { AppError } from "@/lib/errors";
-import type { AccountProvider, MarketProvider, TradingProvider } from "@/providers/interfaces";
-import { MockAccountProvider, MockMarketProvider, MockTradingProvider } from "@/providers/mock";
+import type { AccountProvider, AutomationProvider, MarketProvider, TradingProvider } from "@/providers/interfaces";
+import { MockAccountProvider, MockAutomationProvider, MockMarketProvider, MockTradingProvider } from "@/providers/mock";
 
 export type TradingProviderKind = "mock" | "deriv" | "api";
 
@@ -10,6 +10,7 @@ export type ProviderBundle = {
   marketProvider: MarketProvider;
   tradingProvider: TradingProvider;
   accountProvider: AccountProvider;
+  automationProvider: AutomationProvider;
 };
 
 export function createProviderBundle(kind: TradingProviderKind = env.NEXT_PUBLIC_TRADING_PROVIDER): ProviderBundle {
@@ -18,6 +19,7 @@ export function createProviderBundle(kind: TradingProviderKind = env.NEXT_PUBLIC
       marketProvider: new MockMarketProvider(),
       tradingProvider: new MockTradingProvider(),
       accountProvider: new MockAccountProvider(),
+      automationProvider: new MockAutomationProvider(),
     };
   }
 
@@ -26,6 +28,7 @@ export function createProviderBundle(kind: TradingProviderKind = env.NEXT_PUBLIC
       marketProvider: new DerivMarketProvider(),
       tradingProvider: new DerivTradingProvider(),
       accountProvider: new DerivAccountProvider(),
+      automationProvider: new DerivAutomationProvider(),
     };
   }
 

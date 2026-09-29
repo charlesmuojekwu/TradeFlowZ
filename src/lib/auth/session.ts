@@ -70,7 +70,7 @@ export function isSafeReturnPath(value: string | null | undefined) {
 
   try {
     const parsed = new URL(value, "https://trade.local");
-    return parsed.origin === "https://trade.local" && ["/trade", "/positions", "/history"].includes(parsed.pathname);
+    return parsed.origin === "https://trade.local" && safeReturnPaths.has(parsed.pathname);
   } catch {
     return false;
   }
@@ -94,3 +94,20 @@ export function safeCompare(left: string, right: string) {
 function deriveKey(secret: string) {
   return createHash("sha256").update(secret).digest();
 }
+
+const safeReturnPaths = new Set([
+  "/dashboard",
+  "/trade",
+  "/automation",
+  "/copy",
+  "/strategies",
+  "/strategies/lab",
+  "/contracts",
+  "/contracts/rise-fall",
+  "/contracts/digits",
+  "/contracts/accumulators",
+  "/contracts/multipliers",
+  "/positions",
+  "/history",
+  "/analytics",
+]);

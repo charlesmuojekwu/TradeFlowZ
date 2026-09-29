@@ -66,6 +66,7 @@ export type PositionStatus = "open" | "won" | "lost" | "sold" | "unknown";
 
 export type Position = {
   contractId: string;
+  source?: "manual" | "automation" | "copy";
   symbol: string;
   displaySymbol: string;
   direction: TradeDirection;

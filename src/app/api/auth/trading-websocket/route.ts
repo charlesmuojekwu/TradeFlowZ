@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
         {
           error: body.errors?.[0]?.message ?? "Unable to authorize a secure trading WebSocket.",
         },
-        { status: otpResponse.status },
+        { status: otpResponse.ok ? 502 : otpResponse.status },
       );
 
       if (otpResponse.status === 401) {

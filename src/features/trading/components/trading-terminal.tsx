@@ -17,6 +17,7 @@ import { TradingHeader } from "./trading-header";
 
 type TradingTerminalProps = {
   activeSection?: "trade" | "positions" | "history";
+  embedded?: boolean;
 };
 
 type MobileView = "markets" | "chart" | "ticket" | "positions";
@@ -40,7 +41,7 @@ const mobileViews = [
   { id: "positions", label: "Positions", icon: ReceiptText },
 ] as const;
 
-export function TradingTerminal({ activeSection = "trade" }: TradingTerminalProps) {
+export function TradingTerminal({ activeSection = "trade", embedded = false }: TradingTerminalProps) {
   const workspace = useTradingWorkspace();
   const [mobileView, setMobileView] = useState<MobileView>(activeSection === "positions" ? "positions" : "chart");
   const { isSidebarOpen, setSidebarOpen } = useUiStore();
@@ -52,7 +53,7 @@ export function TradingTerminal({ activeSection = "trade" }: TradingTerminalProp
   const showMobileTradingTabs = activeSection !== "history";
 
   return (
-    <main className="flex h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground lg:min-h-[720px]">
+    <main className={embedded ? "flex h-full min-h-0 flex-col overflow-hidden bg-background text-foreground" : "flex h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground lg:min-h-[720px]"}>
       <TradeResultNotification />
       <TradingHeader
         accounts={workspace.accounts}

@@ -14,7 +14,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       authStatus={params?.auth}
       isAuthenticated={Boolean(session)}
       reason={params?.reason}
-      returnTo={normalizeReturnPath(params?.returnTo)}
+      returnTo={normalizeReturnPath(params?.returnTo, "/dashboard")}
     />
   );
 }
